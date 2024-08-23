@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Scalable Chat-app</title>
+</head>
+<body>
+    <div>
+            <h1>Chat-app</h1>
+            <input type="text" alt="msg-from-user" id = 'msg' />
+            <button onclick="sendMsg()">Send</button>
+
+            <div id="messages"></div>
+            <!-- <p id="para">messages...</p> -->
+    </div>
+
+    <script src="/socket.io/socket.io.js"></script>
+    <script>
+        const socket = io();
+        const msg = document.getElementById('msg')
+        const messagesContainer = document.getElementById('messages')
+
+        const sendMsg = () => {
+            const usermsg = msg.value;
+            socket.emit('user-msg',usermsg);
+            msg.value = ''
+        }
+
+        socket.on('redis-server-msg',(msg_from_redis_server) => {
+            // para.innerHTML = servermsg
+
+            const para = document.createElement('p')
+            para.innerHTML = msg_from_redis_server
+            messagesContainer.append(para)
+        })
+
+    </script>
+</body>
+</html>
